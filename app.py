@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 # from pymongo import MongoClient
 from flask_bcrypt import Bcrypt
 from form import RegisterForm, LoginForm
+from configuration import Configuration
 # import os
 
 app = Flask(__name__) # __name__代表目前執行的模組
@@ -18,6 +19,8 @@ app = Flask(__name__) # __name__代表目前執行的模組
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
 #     os.path.join(pjdir, 'data.sqlite')
 # app.config['SECRET_KEY'] = 'fjfisljdqoiahf;laojdqahlwdjayfghlkjd'
+
+app.config.from_object(Configuration)
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
