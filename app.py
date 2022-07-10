@@ -84,7 +84,7 @@ def login():
 
     if form.validate_on_submit():
         
-        pass
+        return "testing"
 
     return render_template("login.html", form=form)
 
