@@ -1,21 +1,16 @@
 <!-- 這裡是首頁的 html 管理 -->
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="description" content="Mr.黃先生的雜燴網，這是一個專丟有的沒的，蔣淦話的地方，
-        歡迎大家來瀏覽我的網站，看一下內容，笑一下，也不錯~~"/>
-        <meta name="auther" content="Mr.黃"/>
-        <meta name="keywords" content="Mr.黃先生, Mr.黃先生的雜燴網, 專丟有的沒的,
-        蔣淦話的地方, 歡迎大家來瀏覽我的網站，看一下內容，笑一下，也不錯~~"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>(首頁)Mr.黃的網站，一個專丟有的沒的，蔣淦話的地方~~呵呵!!</title>
-        <link rel="stylesheet" href="../static/css/class&id_index.css" />
-    </head>
-    <body>
+{% extends "base.html" %}
+
+{% block title %}
+    (首頁)Mr.黃的網站，一個專丟有的沒的，蔣淦話的地方~~呵呵!!
+{% endblock %}
+
+{% block content %}
+    <center>
         <h1>
             歡迎，測試。
         </h1>
         <a href="/register">register page</a>
-        <a href="/login">login</a>
-    </body>
-</html>
+        <a href="/login">login</a>        
+    </center>
+{% endblock %}

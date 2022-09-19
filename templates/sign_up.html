@@ -1,9 +1,11 @@
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>sign up</title>
-    </head>
-    <body>
+{% extends "base.html" %}
+
+{% block title %}
+    sign up
+{% endblock %}
+
+{% block content %}
+    <center>
         <form action="" method="post">
             {{ form.hidden_tag() }}
             {{ form.username.label }}
@@ -21,5 +23,7 @@
             {{ form.submit.label }}
             {{ form.submit }}
         </form>
-    </body>
-</html>
+        <br/>
+        {{ msg }}
+    </center>
+{% endblock %}
