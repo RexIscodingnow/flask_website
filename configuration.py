@@ -1,6 +1,6 @@
 import os
 
-class Configuration():
+class Config():
     # 取得目前文件資料夾路徑
     pjdir = os.path.abspath(os.path.dirname(__file__))
     # 新版本的部份預設為none，會有異常，再設置True即可。

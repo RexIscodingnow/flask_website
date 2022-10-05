@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm   # 要先繼承這個類別
 # 表單功能類別
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, EqualTo   # 驗證器
 from wtforms.fields import EmailField
 
@@ -33,4 +33,14 @@ class LoginForm(FlaskForm):
     password = PasswordField('password', validators=[
         DataRequired()
     ])
+    remember_time = SelectField(
+        validators=[DataRequired()],
+        
+        # 已換算成 XXX分鐘
+        choices=[(5, "5 分鐘"), (30, "30 分鐘"), (720, "12 小時")],
+        
+        # 限制型別為 int
+        coerce=int
+    )
+
     submit = SubmitField('login')
