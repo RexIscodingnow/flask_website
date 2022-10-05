@@ -41,7 +41,7 @@ bootstrap = Bootstrap(app)
             nullable = True/False : 允許為空值。 開啟的時候，新增資料時，該欄位可以不用新增資料(可選的欄位)
                                                 反之，新增資料時，未新增到該欄位，要 debug 囉! (必填欄位)
 
-            以下是我用過 der...
+            以下是欄位型別 與 功能
 
             db.欄位功能                   | Python
        |----------------------------------|------------------|
@@ -68,6 +68,8 @@ bootstrap = Bootstrap(app)
                                                                            ......
                    
                    class 名稱(資料表).query.filter_by().功能() => filter_by() 做簡單查詢，有人說是語法糖
+                                            
+                                            P.S : 好比 SQL 的語句 where
 '''
 class User(db.Model):
     __tablename__ = 'users'     # sqlite 資料庫的 tablename
@@ -134,7 +136,7 @@ def register():
 
         user = User(
             username=username,
-            password_hash=password,
+            password_hash=password,   # 使用 被裝飾器 @property 設成【唯寫】屬性的變數，新增用戶密碼
             email=email
         )
         db.session.add(user)   # 新增欄位內資訊
