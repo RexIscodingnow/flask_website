@@ -5,17 +5,20 @@ from flask_modules import db, bcrypt
 
     sqlite 建立欄位功能與型別
 
-    說明 => __tablename__ = '資料庫的 table 名稱' : 若沒有設置，預設使用 class 的名稱
+    說明 => __tablename__ = '資料庫的 table 名稱' : 若沒有設置，預設使用 class 的名稱 (轉小寫字母)
             primary_key = True : 基本上要有主鍵
             unique = True/False : 唯一值。 在同一個 table 下的欄位(同一個欄位下)，不可以有第二個相同的值
             nullable = True/False : 允許為空值。 開啟的時候，新增資料時，該欄位可以不用新增資料(可選的欄位)
                                                 反之，新增資料時，未新增到該欄位，要 debug 囉! (必填欄位)
 
+                欄位設置 Column() 沒設置，卻能用的，是用了甚麼巫術
+        還是用了 C8764 或是 屠龍倚天劍 ，斬斷了要用 Column() 配置欄位的因果關係         (C8764 = 星爆氣流斬)
+
             以下是欄位型別 與 功能
 
             db.欄位功能                   | Python
        |----------------------------------|------------------|
-       | 1. Column() : 配置欄位            |                  |
+       | 1. Column() : 配置欄位            |                  |   **  後面設置多更多
        | 2. Integer : 32 bit 的整數        | int              |
        | 3. SmallInteger : 16 bit 的整數   | int              |
        | 4. BigInteger : 不限精度 的整數   | int              |
@@ -68,7 +71,7 @@ from flask_modules import db, bcrypt
 #     def __repr__(self):
 #         return 'Role is %s' % self.name
 
-class User(db.Model):
+class Users(db.Model):
     __tablename__ = 'users'     # sqlite 資料庫的 tablename
     id = db.Column(db.Integer, primary_key=True)    # 設定主鍵
     # String -> 文字型態  unique -> 唯一值  nullable -> True: 可空格, False: 不能為空
@@ -101,4 +104,9 @@ class User(db.Model):
         return bcrypt.check_password_hash(self.password, password)
 
     def __repr__(self):
+        '''
+            這個函式返回值，是在 terminal 執行 Python Shell 底下
+            對資料庫 進行【增、刪、改、查】等指令
+            所返回的 " 指定欄位資料 "
+        '''
         return "<User: %s, email: %s>" % (self.username, self.email)
