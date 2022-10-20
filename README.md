@@ -5,7 +5,6 @@
 
 * **sqlite 資料庫建立**
     * 總共兩步驟
-    * 
         * 引用目標的編輯檔  >>> from 資料庫編輯檔 import db
         * 建立資料庫  >>> db.create_all()
 
