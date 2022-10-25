@@ -11,13 +11,15 @@
 * **在 Python Shell 底下的 sqlite 指令**
     * (皆以使用者為例)
 
-    1. 引用目標的編輯檔 => >>> from 資料庫編輯檔 import db
-            引入資料表 => >>> from 資料庫編輯檔 import Users, ......
+    1. 引用目標的編輯檔 => >>> ```from 資料庫編輯檔 import db```
+            引入資料表 => >>> ```from 資料庫編輯檔 import Users, ......```
     
     2. 查詢指令 => >>> user = Users.query.filter_by(查詢欄位=輸入資訊).first()
         
-        * |>>> user = Users.query.filter_by(id = 1).first()|
-        * |<User: Rex, email: admin@hotmail.com>|
+        ```
+        * |>>> user = Users.query.filter_by(id = 1).first()
+        * | <User: Rex, email: admin@hotmail.com>
+        ```
 
     3. 增加資料
         
