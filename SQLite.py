@@ -1,4 +1,4 @@
-from flask_modules import db, bcrypt
+from flask_modules import db, bcrypt, UserMixin
 
 '''
     反正經常使用的型別，也就那幾個，當作這是個長~~~~~~~~的要命的筆記
@@ -71,7 +71,7 @@ from flask_modules import db, bcrypt
 #     def __repr__(self):
 #         return 'Role is %s' % self.name
 
-class Users(db.Model):
+class Users(db.Model, UserMixin):
     __tablename__ = 'users'     # sqlite 資料庫的 tablename
     id = db.Column(db.Integer, primary_key=True)    # 設定主鍵
     # String -> 文字型態  unique -> 唯一值  nullable -> True: 可空格, False: 不能為空

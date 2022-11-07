@@ -1,10 +1,13 @@
 # Flask 的函式與功能
+from flask import session
 from flask_modules import app, render_template, redirect, url_for, request
 # 身分驗證 的函式與功能
 from flask_modules import login_manager, login_user, login_required, current_user, logout_user, UserMixin
 
-from form import RegisterForm, LoginForm    # flask 表單 && wtform 模組
+from form import RegisterForm, LoginForm, ForgotPassword    # flask 表單 && wtform 模組
 from sqlite import db, Users    # 資料庫管理
+
+from datetime import timedelta
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -60,10 +63,11 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data).first()
+        # 做一次搜尋 "使用者資料表"，判斷是否在資料庫內
+        user = Users.query.filter_by(email=form.email.data).first()   # 以電子郵件欄位，作為搜尋條件
         if user:
             if user.check_password(form.password.data):
-                remember_time = form.remember_time.data
+                remember_time = timedelta(form.remember_time.data)
                 
                 # login_user(當下登入的使用者, 記住登入(自訂時間，要設為 True), 記住登入時間長度)
                 login_user(user, remember=True, duration=remember_time)
@@ -87,7 +91,42 @@ def next_is_valid(url):
 @app.route('/user')
 @login_required
 def user():
+    '''
+        @login_required 裝飾器
+        是用在需要登入，才能訪問的頁面
+    '''
     return render_template("user.html")
+
+@app.route('/logout')
+@login_required
+def logout():
+    '''
+    登出功能 => logout_user()
+    清除伺服端的標識 id => session.pop() 
+    '''
+    logout_user()
+    # session.pop()
+    return redirect(url_for("login"))
+
+@app.route('/forgot_pw', methods=['GET', 'POST'])
+def forgotPw():
+    '''
+    忘記密碼 之頁面
+    後續調整
+    '''
+    form = ForgotPassword()
+
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=form.email.data).first()
+        
+        if user:
+            password = form.new_password.data
+            
+            user.password_hash = password
+            db.session.add(user)
+            db.session.commit()
+
+    return render_template("forgot_password.html", form = form)
 
 if __name__ == "__main__": # 如果以主程式執行
     app.run(debug=True)
