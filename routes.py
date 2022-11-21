@@ -1,3 +1,7 @@
+'''
+    網站路由管理
+'''
+
 # Flask 的函式與功能
 from flask import session
 from flask_modules import app, render_template, redirect, url_for, request

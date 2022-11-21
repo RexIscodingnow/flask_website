@@ -1,49 +1,5 @@
 from flask_modules import db, bcrypt, UserMixin
 
-'''
-    反正經常使用的型別，也就那幾個，當作這是個長~~~~~~~~的要命的筆記
-
-    sqlite 建立欄位功能與型別
-
-    說明 => __tablename__ = '資料庫的 table 名稱' : 若沒有設置，預設使用 class 的名稱 (轉小寫字母)
-            primary_key = True : 基本上要有主鍵
-            unique = True/False : 唯一值。 在同一個 table 下的欄位(同一個欄位下)，不可以有第二個相同的值
-            nullable = True/False : 允許為空值。 開啟的時候，新增資料時，該欄位可以不用新增資料(可選的欄位)
-                                                反之，新增資料時，未新增到該欄位，要 debug 囉! (必填欄位)
-
-                欄位設置 Column() 沒設置，卻能用的，是用了甚麼巫術
-        還是用了 C8764 或是 屠龍倚天劍 ，斬斷了要用 Column() 配置欄位的因果關係         (C8764 = 星爆氣流斬)
-
-            以下是欄位型別 與 功能
-
-            db.欄位功能                   | Python
-       |----------------------------------|------------------|
-       | 1. Column() : 配置欄位            |                  |   **  後面設置多更多
-       | 2. Integer : 32 bit 的整數        | int              |
-       | 3. SmallInteger : 16 bit 的整數   | int              |
-       | 4. BigInteger : 不限精度 的整數   | int              |
-       | 5. Float : 浮點數                 | float            |
-       |-----------------------------------|------------------|
-       | 6. String(字數) : 文字            | str              |
-       | 7. Text() : 長字串                | str              |
-       | 8. LargeBinary : 二進制文件       | str              |
-       | 9. PickleType : 序列化文件        | object           |
-       |-----------------------------------------------------|
-
-       增、刪、改、查，等功能操作
-       
-        大致會用到: db.session.add(新增資料、更動資料)
-                   db.session.delete(要刪除的目標資料)
-                   db.session.commit()  =>  提交資料。 前面兩種指令執行後，一定要推送，不然不會更動
-            
-            查詢:  class 名稱(資料表).query.filter().功能()  =>  功能() --> all() 全抓下來 (所有查詢結果)
-                                                                           first() 返回第一筆資料
-                                                                           ......
-                   
-                   class 名稱(資料表).query.filter_by().功能() => filter_by() 做簡單查詢，有人說是語法糖
-                                            
-                                            P.S : 好比 SQL 的語句 where
-'''
 
 '''
     權限篇，日後更新
