@@ -4,6 +4,33 @@
 # 警告!! 會有蠻長一段的註解，~~以及贛話~~，耐心拜讀 (誤
 
 
+* 模組清單
+   * 清單如下
+        1. flask 相關模組
+                |-->  Flask 基本設置 (class)
+                |
+                |-->  資料庫管理 (flask_sqlalchemy)
+                |
+                |-->  登入管理  (flask_login)
+                |
+                |-->  加密模組 (flask_bcrypt)
+                |
+                |-->  表單功能 (在 form.py 引用 => flask_wtf, wtforms)
+                |
+                |-->  前端模板 (flask_bootstrap，也可以引用 Bootstrap 官網提供的模板，作為替代方案。 P.S : 如果是大神等級，額外生一個，也是一種方案 (嗯......欸?)
+
+        2. JWT 加密模組
+        3. datetime 模組
+
+    模組相關說明 (如下註記)
+
+        從 flask 引入 Flask 類別
+        。 render_template 從 templates 資料夾引入 .html 檔案
+                預設資料夾名稱: templates
+                若要改從其他名稱的資料夾引入，使用 Flask() 的參數 => template_folder = "更改名稱"
+        。 request 網頁請求方式(在 HTTP 協定有 8 種)，常見有 4 種 -> GET, POST, DELETE, UPDATE
+        。 redirect 網頁的重新導向 ex: 在 XX 網頁(/平台) 填完表單後提交完，轉到別的頁面之類的...
+        。 url_for 導向指定函式之頁面， url_for("函式名稱")
 
 
 * **sqlite 資料庫建立 & 欄位筆記**
@@ -110,6 +137,13 @@
         * |>>> user = Users.query.filter_by(id = 1).first()
         * | <User: Rex, email: admin@hotmail.com>
         ```
+
+    5. 刪除資料
+       
+       * 流程如下
+            1. 查詢目標 => >>> user = Users.query.filter_by(查詢欄位=輸入資訊).first()
+            2. 刪除資料 => >>> db.session.delete(user)
+            3. 提交更動 => >>> db.session.commit()
 
 
 ### 其他の筆記 如下
