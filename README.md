@@ -17,12 +17,13 @@
                 |
                 |-->  表單功能 (在 form.py 引用 => flask_wtf, wtforms)
                 |
-                |-->  前端模板 (flask_bootstrap，也可以引用 Bootstrap 官網提供的模板，作為替代方案。 P.S : 如果是大神等級，額外生一個，也是一種方案 (嗯......欸?)
+                |-->  前端模板 (flask_bootstrap，也可以引用 Bootstrap 官網提供的模板，作為替代方案。
+                        P.S :如果是大神等級，額外生一個，也是一種方案 (嗯......欸?)
 
         2. JWT 加密模組
         3. datetime 模組
 
-    模組相關說明 (如下註記)
+    * 模組相關說明 (如下註記)
 
         從 flask 引入 Flask 類別
         。 render_template 從 templates 資料夾引入 .html 檔案
@@ -31,6 +32,27 @@
         。 request 網頁請求方式(在 HTTP 協定有 8 種)，常見有 4 種 -> GET, POST, DELETE, UPDATE
         。 redirect 網頁的重新導向 ex: 在 XX 網頁(/平台) 填完表單後提交完，轉到別的頁面之類的...
         。 url_for 導向指定函式之頁面， url_for("函式名稱")
+
+        登入管理模組 =>  flask_login
+        。 login_manager.init_app(app)  =>  初始化 flask_login 模組
+        。 login_manager.login_view = 'login'
+                大概是: 未登入 或 訪客 狀態，進入需要登入才能 使用的頁面。
+                        阻擋 非登入用戶，將其轉到登入頁面，做登入步驟
+        
+        。 login_manager.session_protection = 'strong'
+                保護 cookie 用的參數，有 'basic' 與 'strong' 兩個等級
+                    或是關閉該功能 'None' ，預設值為 'basic'
+        
+    * 在 app.config[ 參數 ] 底下的設置
+        
+        1. SQLALCHEMY_DATABASE_URI  =>  資料庫路徑
+            
+            * 路徑設置，如下  
+                        (Windows，3 個 / 號) ->  'sqlite:///' + 'sqlite 檔案，放在哪個資料夾底下'
+                                
+                        (Linux，4 個 / 號) -> 'sqlite:////' + 'sqlite 檔案，放在哪個資料夾底下'
+
+        2. SQLALCHEMY_TRACK_MODIFICATIONS  =>  查到是寫信號
 
 
 * **sqlite 資料庫建立 & 欄位筆記**
@@ -148,13 +170,23 @@
 
 ### 其他の筆記 如下
 
+* ```from flask import XXX, ooo, ......```
+
+      * |--> render_template
+                1. param template_name_or_list: 
+                        1-1. 資料型別: 字串
+                        1-2. 檔案名稱 (ex: "xxxooxo.html")
+                2. param **context:
+                        前端用的 = 後端用的
+
 * ```from flask_login import xxx, ooooo, ...... ```
 
       * |--> login_user()
                 1. param user: 繼承 UserMixin 屬性的 "使用者類別"，以 object type 作為參數
                 2. param remember: 記住登入狀態，以 session 的型態存取，以 boolean 開關功能
                 3. param duration: 記住登入時長。 沒有設置，則承參數 remember，預設為 1 年
-                                    該參數給定 "時間的資料型別"，也就是 "時間長度"
+                                            該參數給定 "時間的資料型別"
+                                            datetime 模組底下的 timedelta
                                 
                                 ** 就是有給，就認給的時間 ; 沒給就乖乖用 remember 存 1 年 **
 
@@ -163,6 +195,13 @@
 
 
 * ```from flask_wtf import FlaskForm```
+
+      * |--> validate_on_submit()  表單確認
+                1. return type: bool
+                2. ** 所有必填選項 **  輸入完成且按下提交，返回 True，反之 False
+                                   "" 非必填的項目，不在範圍內 ""
+
+
 * ```from wtforms import OOO, XXX, .....```
 
       * flask_wtf 表單設置
