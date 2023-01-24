@@ -178,7 +178,9 @@
                         1-2. 檔案名稱 (ex: "xxxooxo.html")
                 2. param **context:
                         前端用的 = 後端用的
-
+                
+            實作: return render_template("xxxooo.html", Jinja2_變數名-1 = 要顯示的資訊-1, Jinja2_變數名-2 = 要顯示的資訊-2, ...)
+****
 * ```from flask_login import xxx, ooooo, ...... ```
 
       * |--> login_user()
@@ -232,3 +234,59 @@
                 2. 送出按鍵 -----> SubmitField()
                 ...
                 ...
+
+* Jinja2 模板引擎
+
+      * 這部分是在 HTML 的操作，相關的參數 與 過濾器函式
+
+          1. 表達式
+               1. {%  %}
+                 * 說明: { } 內部的兩側，以 % 號表示，是做為運算用的表示式
+                 
+                 * 例子: 
+                      1. 樣板繼承
+                            目標的樣板: base.html
+                                {% block 使用的名稱 %}
+
+                            要使用的樣板: user.html
+                                {% block 使用的名稱 %}
+                                    樣板內容
+                                {% endblock %}
+                      2. for 迴圈
+                            {% for item in items %}
+                                {{ item }}
+                            {% endfor %}
+
+               2. {{  }}
+                 * 說明: 用兩層 { } 號表示，此為行語句，透過一的 標籤(tag)來代表 表達式
+                 
+                 * 例子:
+                      * 在 Python 這邊的路由
+                            @app.route("/xxxx", mothods=["GET", "POST"])
+                            def page():
+                                ......
+                                ......
+                                return render_template("目標檔.html", value_1 = 運算結果-1, value_2 = 運算結果-2)
+
+                      * 在 HTML 檔案
+                            <html>
+                                <head> ........ </head>
+                                <body>
+                                    {{ value_1 }}
+
+                                    {{ value_2 }}
+                                </body>
+                            </html>
+
+               3. {#  #}
+                 * 說明: { } 內部的兩側，以 % 號表示，這是做為 Jinja2 註解使用的
+                 
+                 * 例子:
+                      1. {# 我的註解 #}
+                      2. {#
+                            {% for item in items %}
+                                {{ item }}
+                            {% endfor %}
+                          #}
+
+
