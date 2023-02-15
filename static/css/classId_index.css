@@ -1,3 +1,26 @@
-style {
-    background-color: black;
+/* 背景顏色 */
+.background_color {
+    background-color: khaki;
 }
+
+/* 首頁 文字設定 */
+.index_font {
+    color: black;
+    font-size: 30px;
+}
+
+.user_font {
+    color: black;
+    font-size: 25px;
+}
+
+.register_font {
+    color: black;
+    font-size: 20px;
+}
+
+.login-font {
+    color: black;
+    font-size: 20px;
+}
+
