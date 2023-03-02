@@ -9,7 +9,7 @@
         1. flask 相關模組
                 |-->  Flask 基本設置 (class)
                 |
-                |-->  資料庫管理 (flask_sqlalchemy)
+                |-->  資料庫管理 (flask_sqlalchemy, flask_migrate)
                 |
                 |-->  登入管理  (flask_login)
                 |
@@ -51,6 +51,13 @@
                         (Windows，3 個 / 號) ->  'sqlite:///' + 'sqlite 檔案，放在哪個資料夾底下'
                                 
                         (Linux，4 個 / 號) -> 'sqlite:////' + 'sqlite 檔案，放在哪個資料夾底下'
+            * 延伸
+                * MySQL: 'mysql://username:password@hostname:port/database'
+                      1. username: 使用者名稱
+                      2. password: MySQL 的密碼
+                      3. hostname: 主機名 (預設是 localhost => 127.0.0.1)
+                      4. port: 連接埠 (預設是 3306)
+                      5. database: 要連接的資料庫
 
         2. SQLALCHEMY_TRACK_MODIFICATIONS  =>  查到是寫信號
 
@@ -59,6 +66,11 @@
     * 總共兩步驟
         * 引用目標的編輯檔  >>> from 資料庫編輯檔 import db
         * 建立資料庫  >>> db.create_all()
+        
+        * 註記: db.create_all() 的指令，如果已經建立好 .sqlite 檔案，
+                那又 有一個 或 二個(含)以上的資料表，要新增在原檔案裡，
+                再使用一次 db.create_all() 的指令，其實會在原檔案裡
+                **再加蓋上去，也就是在原檔案新增，原始資料不變動，的情況下添加新的資料表**
 
     
     * sqlite 欄位筆記
@@ -105,7 +117,7 @@
                                                 
                                                 P.S : 好比 SQL 的語句 where
 
-* **在 Python Shell 底下的 sqlite 指令**
+* **在 Python Shell (CLI) 底下的 sqlite 指令**
     * (皆以使用者為例)
 
     1. 引用目標的編輯檔
@@ -155,7 +167,7 @@
 
     4. 查詢指令 => >>> user = Users.query.filter_by(查詢欄位=輸入資訊).first()
         
-        ```
+        ```python
         * |>>> user = Users.query.filter_by(id = 1).first()
         * | <User: Rex, email: admin@hotmail.com>
         ```
@@ -168,7 +180,97 @@
             3. 提交更動 => >>> db.session.commit()
 
 
+* **Sqlite 的資料庫搬遷 (欄位改動)**
+    
+    * 簡介: 當 sqlite 已經用 db.create_all() 指令建立完成後，假如有要新增其他欄位，
+            **在已經建好的資料表中，異動 目標欄位**
+            那麼，原先的建立指令 db.create_all() 就不管用
+            為什麼呢 ?
+            **畢竟 db.create.all() 是用來建立 整個資料"表"**
+            **而非單獨建立資料"欄"**
+        
+        * 假設，有一個管理使用者的資料表，那我要在原先的資料表中，新增存放個人資料的 "年齡"、"性別"、"血型"
+          一共 3 個欄位，那如果使用 db.create_all() 的方式，添加在原本的"資料表"
+          **那麼，我必須把原本的 .sqlite 檔案整個刪除，再用 db.create_all() 做新增才可以達成**
+        
+        * 因為 db.create_all() 是建立整個資料表的特性，所以要使用 flask_migrate 模組，作為 **"單獨建立資料欄"** 來解決
+
+    * 安裝模組
+        * 指令 => ```pip install flask-migrate```
+
+    * 前置動作
+        1. ```from flask_migrate import Migrate```
+        2. ```migrate = Migrate(app, db)```
+            * 放置參數如下
+                1. app: Flask(__name__) 的網站參數操縱名稱 (指派過去的 變數名稱)
+                2. db: SQLAlchemy(app) 的資料庫操作名稱 (指派過去的 變數名稱)
+    
+    * flask_migrate 的指令操作
+    * 操作工具: Windows 命令提示字元
+
+        * 在初始設定，總共有 4 個步驟
+              1. set FLASK_APP = app.py  ----> 為主要執行的 Python 檔案 (整個程式的 entry pointer (進入點))
+              2. flask db init  ----> 初始化 migrate，創建 migrations 資料夾
+              3. flask db migrate -m "說明文字"  ----> 建置腳本
+              4. flask db upgrade  ----> 更新版本
+        
+        * 之後的第 2 次、第 3 次、......
+              * 基本上，就剩下 "上方的步驟 3 ~ 4 的指令"
+
+        * 其他指令
+            * flask db --help
+                可以查詢相關指令
+            * flask db init [–multidb]
+                初始化資料庫
+            * flask db migrate
+                建置腳本，會自動對異動的db做腳本的建立，這時候不會影響到資料庫
+            * flask db edit
+                …
+            * flask db upgrade
+                如果沒有指定版本，則以最新版本來更新
+            * flask db downgrade
+                資料庫降版，如果沒有指令就以上版還原
+            * flask db stamp
+                …
+            * flask db current
+                顯示當前版本
+            * flask db history
+                顯示歷史歷程
+            * flask db show
+                顯示當前版本詳細資訊
+            * flask db merge
+                合併兩個版本
+            * flask db heads
+                顯示目前版本號
+            * flask db branches
+                顯示當前分支點
+
 ### 其他の筆記 如下
+
+* ```python
+    @app.route('/user/<id>')
+    def user(id):
+        ......
+        return ......
+  ```
+
+      * |--> 帶有 <> 號是 "路由上設置的參數"，底下宣告一個 "同名稱變數" 做接收數值
+      * |--> 其他設置
+              1. @app.route('/your_route/<type: variable>')  =>  <型別: 變數名>
+              2. flask 支援的型別有 ```str```, ```int```, ```float```, ```path```，
+                    **如果沒有特別定義參數型別，則預設型別為 "字串"**
+
+
+* ```python
+    from flask import Flask
+
+    app = Flask(__name__, 
+        static_url_path="",  # 靜態檔案，在路由上訪問的路徑 (網路上)
+        static_folder="",  # 靜態檔案 (CSS, JS) 檔案路徑 (本地端)
+        template_folder=""  # 樣板渲染 (HTML) 檔案路徑 (本地端)
+    )
+  ```
+
 
 * ```from flask import XXX, ooo, ......```
 
@@ -180,7 +282,8 @@
                         前端用的 = 後端用的
                 
             實作: return render_template("xxxooo.html", Jinja2_變數名-1 = 要顯示的資訊-1, Jinja2_變數名-2 = 要顯示的資訊-2, ...)
-****
+
+
 * ```from flask_login import xxx, ooooo, ...... ```
 
       * |--> login_user()
@@ -196,12 +299,14 @@
                 4. 在登入成功後，才可以訪問的頁面。 譬如: 用戶管理、登入才能使用的功能
 
 
+
 * ```from flask_wtf import FlaskForm```
 
       * |--> validate_on_submit()  表單確認
                 1. return type: bool
                 2. ** 所有必填選項 **  輸入完成且按下提交，返回 True，反之 False
                                    "" 非必填的項目，不在範圍內 ""
+
 
 
 * ```from wtforms import OOO, XXX, .....```
@@ -235,6 +340,7 @@
                 ...
                 ...
 
+
 * Jinja2 模板引擎
 
       * 這部分是在 HTML 的操作，相關的參數 與 過濾器函式
@@ -262,13 +368,16 @@
                  
                  * 例子:
                       * 在 Python 這邊的路由
+                            ```python
                             @app.route("/xxxx", mothods=["GET", "POST"])
                             def page():
                                 ......
                                 ......
                                 return render_template("目標檔.html", value_1 = 運算結果-1, value_2 = 運算結果-2)
+                            ```
 
                       * 在 HTML 檔案
+                            ```html
                             <html>
                                 <head> ........ </head>
                                 <body>
@@ -277,6 +386,7 @@
                                     {{ value_2 }}
                                 </body>
                             </html>
+                            ```
 
                3. {#  #}
                  * 說明: { } 內部的兩側，以 % 號表示，這是做為 Jinja2 註解使用的
