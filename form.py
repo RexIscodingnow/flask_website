@@ -1,11 +1,11 @@
 '''
-    
+flask_wtf 表單設置    
 '''
 
 from flask_wtf import FlaskForm   # 要先繼承這個類別
 # 表單功能類別
 from wtforms import StringField, PasswordField, SubmitField, SelectField
-from wtforms.validators import DataRequired, EqualTo   # 驗證器
+from wtforms.validators import DataRequired, EqualTo, Length   # 驗證器
 from wtforms.fields import EmailField
 
 # 先從繼承 FlaskForm 開始
@@ -74,3 +74,24 @@ class ForgotPassword(FlaskForm):
     ])
 
     submit = SubmitField('更動!!')
+
+class UserForm(FlaskForm):
+    '''
+    使用者的操作選單
+    '''
+    pass
+
+
+class GoodsPageForm(FlaskForm):
+    '''
+    頁面名稱: 好東西
+    '''
+    n_number = StringField(
+        validators=[Length(max=8)]
+    )
+    n_title = StringField()
+
+    offer_info = SubmitField()
+
+
+
