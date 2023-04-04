@@ -294,6 +294,15 @@
                                             datetime 模組底下的 timedelta
                                 
                                 ** 就是有給，就認給的時間 ; 沒給就乖乖用 remember 存 1 年 **
+                        
+                    若不用 duration 這個參數，則用
+                        
+                        => app.permanent_session_lifetime = remember_time
+
+                        效果是一樣的，就是控制 session 存活時間
+                        注意!! 要把 permanent 屬性設為 True
+
+                        => session.permanent = True
 
       * |--> @login_required 裝飾器
                 4. 在登入成功後，才可以訪問的頁面。 譬如: 用戶管理、登入才能使用的功能
