@@ -35,6 +35,7 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(50), nullable=False)
+    profile = db.Column(db.String(100))
 
     # 密碼加密  使用 @property 設為不可讀取
     @property
@@ -66,3 +67,17 @@ class Users(db.Model, UserMixin):
             所返回的 " 指定欄位資料 "
         '''
         return "<User: %s, email: %s>" % (self.username, self.email)
+
+
+class OtherData(db.Model):
+    '''
+    其他資訊
+    '''
+    __tablename__ = 'N_goods'
+    id = db.Column(db.Integer, primary_key=True)
+    numbers = db.Column(db.String(50))
+    titles = db.Column(db.String(150))
+
+    def __repr__(self):
+        return "<numbers: %s, title: %s>" % (self.numbers, self.titles)
+
