@@ -1,3 +1,7 @@
+'''
+其他設置
+'''
+
 import os
 
 class Config():
