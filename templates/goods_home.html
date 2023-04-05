@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+    好東西 主頁
+{% endblock %}
+
+{% block content %}
+<center>
+    <h1>好東西 一起分享</h1>
+
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        {{ form.n_number(placeholder="車(牌)號(碼) (可選)") }}
+        <br>
+        {{ form.n_title(placeholder="標題 (可選)") }}
+        <br>
+        <br>
+        {{ form.offer_info(value = "提供資訊") }}
+    </form>
+
+    {{ msg }}
+</center>
+
+<hr>
+<p>
+    補充說明: <a href="/goods/1">補充資訊，管理頁</a>
+</p>
+
+{% endblock %}
+

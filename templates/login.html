@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Sign in
+    登入 Sign in
 {% endblock %}
 
 {% block content %}
-    <center>
+    <center class="login-font">
+        <br>
         <form action="" method="post">
             {{ form.hidden_tag() }}
             {{ form.username(placeholder = "用戶名稱") }}
@@ -18,7 +19,7 @@
             <br>
             <br>
             {#  #}
-            {{ form.submit }}
+            {{ form.submit(value = "登入") }}
         </form>
     </center>
 {% endblock %}

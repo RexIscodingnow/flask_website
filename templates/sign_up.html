@@ -1,27 +1,30 @@
 {% extends "base.html" %}
 
 {% block title %}
-    sign up
+    註冊 sign up
 {% endblock %}
 
 {% block content %}
-    <center>
+    <center class="register_font">
+        <br>
         <form action="" method="post">
             {{ form.hidden_tag() }}
-            {{ form.username.label }}
-            {{ form.username }}
+            <!-- {{ form.username.label }} -->
+            {# 輸入框預設文字 使用 placeholder 屬性 #}
+            {{ form.username(placeholder = "名稱") }}
             <br>
-            {{ form.email.label }}
-            {{ form.email }}
+            <!-- {{ form.email.label }} -->
+            {{ form.email(placeholder = "電子郵件") }}
             <br>
-            {{ form.password.label }}
-            {{ form.password }}
+            <!-- {{ form.password.label }} -->
+            {{ form.password(placeholder = "密碼") }}
             <br>
-            {{ form.password2.label }}
-            {{ form.password2 }}
+            <!-- {{ form.password2.label }} -->
+            {{ form.password2(placeholder = "再輸入一次") }}
             <br>
-            {{ form.submit.label }}
-            {{ form.submit }}
+            <!-- {{ form.submit.label }} -->
+            {# 提交鍵的文字 使用 value 屬性 #}
+            {{ form.submit(value = "註冊") }}
         </form>
         <br/>
         {{ msg }}
