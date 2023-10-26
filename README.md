@@ -1,11 +1,12 @@
 # 這是學習紀錄，flask 框架自學 與 實作
-## 日後新增: 權限管理
-## sqlite、註冊、登入功能，新增中...
 # 警告!! 會有蠻長一段的註解，~~以及贛話~~，耐心拜讀 (誤
+## 日後新增: 權限管理
+<!-- ## sqlite、註冊、登入功能，新增中... -->
 
 
-* 模組清單
+# 目錄
    * 清單如下
+        ```
         1. flask 相關模組
                 |-->  Flask 基本設置 (class)
                 |
@@ -17,24 +18,31 @@
                 |
                 |-->  表單功能 (在 form.py 引用 => flask_wtf, wtforms)
                 |
-                |-->  前端模板 (flask_bootstrap，也可以引用 Bootstrap 官網提供的模板，作為替代方案。
+                |-->  前端模板 (flask_bootstrap，也可以引用 Bootstrap 官網提供的模板，作為替代方案。)
                         P.S :如果是大神等級，額外生一個，也是一種方案 (嗯......欸?)
 
         2. JWT 加密模組
         3. datetime 模組
+        ```
 
-    * 模組相關說明 (如下註記)
-
+  * 模組相關說明 (如下註記)
+    ```
         從 flask 引入 Flask 類別
+
         。 render_template 從 templates 資料夾引入 .html 檔案
                 預設資料夾名稱: templates
                 若要改從其他名稱的資料夾引入，使用 Flask() 的參數 => template_folder = "更改名稱"
+
         。 request 網頁請求方式(在 HTTP 協定有 8 種)，常見有 4 種 -> GET, POST, DELETE, UPDATE
+
         。 redirect 網頁的重新導向 ex: 在 XX 網頁(/平台) 填完表單後提交完，轉到別的頁面之類的...
+
         。 url_for 導向指定函式之頁面， url_for("函式名稱")
+
 
         登入管理模組 =>  flask_login
         。 login_manager.init_app(app)  =>  初始化 flask_login 模組
+
         。 login_manager.login_view = 'login'
                 大概是: 未登入 或 訪客 狀態，進入需要登入才能 使用的頁面。
                         阻擋 非登入用戶，將其轉到登入頁面，做登入步驟
@@ -42,142 +50,178 @@
         。 login_manager.session_protection = 'strong'
                 保護 cookie 用的參數，有 'basic' 與 'strong' 兩個等級
                     或是關閉該功能 'None' ，預設值為 'basic'
+    ```
         
+
+# sqlite 資料庫建立 & 欄位筆記
+
+  * **連接資料庫**
     * 在 app.config[ 參數 ] 底下的設置
         
         1. SQLALCHEMY_DATABASE_URI  =>  資料庫路徑
             
             * 路徑設置，如下  
-                        (Windows，3 個 / 號) ->  'sqlite:///' + 'sqlite 檔案，放在哪個資料夾底下'
-                                
-                        (Linux，4 個 / 號) -> 'sqlite:////' + 'sqlite 檔案，放在哪個資料夾底下'
+                  1. (Windows，3 個 / 號) ->  'sqlite:///' + 'sqlite 檔案，放在哪個資料夾底下'     
+                  2. (Linux，4 個 / 號) -> 'sqlite:////' + 'sqlite 檔案，放在哪個資料夾底下'
+            
             * 延伸
-                * MySQL: 'mysql://username:password@hostname:port/database'
+                * MySQL: mysql://username:password@hostname:port/database
                       1. username: 使用者名稱
                       2. password: MySQL 的密碼
                       3. hostname: 主機名 (預設是 localhost => 127.0.0.1)
                       4. port: 連接埠 (預設是 3306)
                       5. database: 要連接的資料庫
 
+                * PostgreSQL: postgresql://username:password@hostname/database
+
         2. SQLALCHEMY_TRACK_MODIFICATIONS  =>  查到是寫信號
 
+    <br>
 
-* **sqlite 資料庫建立 & 欄位筆記**
-    * 總共兩步驟
-        * 引用目標的編輯檔  >>> from 資料庫編輯檔 import db
-        * 建立資料庫  >>> db.create_all()
+  * 兩步驟建立資料庫
+      1. 引用目標的編輯檔  >>> from 資料庫編輯檔 import db
+      2. 建立資料庫  >>> db.create_all()
+      
+      ```
+      * 註記 1: 引入的參數 db 是屬於 SQLAlchemy() 的物件，
+                指令: from 資料庫編輯檔 import db
+                
+                這個 "資料庫編輯檔" 是有宣告 資料庫欄位、屬性的編輯檔
+
+      * 註記 2: db.create_all() 的指令，如果已經建立好 .sqlite 檔案，
+              那又 有一個 或 二個(含)以上的資料表，要新增在原檔案裡，
+              再使用一次 db.create_all() 的指令，其實會在原檔案裡
+              **再加蓋上去，也就是在原檔案新增，原始資料不變動，的情況下添加新的資料表**
         
-        * 註記: db.create_all() 的指令，如果已經建立好 .sqlite 檔案，
-                那又 有一個 或 二個(含)以上的資料表，要新增在原檔案裡，
-                再使用一次 db.create_all() 的指令，其實會在原檔案裡
-                **再加蓋上去，也就是在原檔案新增，原始資料不變動，的情況下添加新的資料表**
-
+        至少我操作的結果是這樣啦!
+      ```
     
-    * sqlite 欄位筆記
-        反正經常使用的型別，也就那幾個，當作這是個長~~~~~~~~的要命的筆記
+    <br>
 
-        sqlite 建立欄位功能與型別
+  * sqlite 欄位筆記
 
-        說明 => __tablename__ = '資料庫的 table 名稱' : 若沒有設置，預設使用 class 的名稱 (轉小寫字母)
-                primary_key = True : 基本上要有主鍵
-                unique = True/False : 唯一值。 在同一個 table 下的欄位(同一個欄位下)，不可以有第二個相同的值
-                nullable = True/False : 允許為空值。 開啟的時候，新增資料時，該欄位可以不用新增資料(可選的欄位)
-                                                    反之，新增資料時，未新增到該欄位，要 debug 囉! (必填欄位)
+    ```
+    sqlite 建立欄位功能與型別 (簡介、懶人包)
 
-                    欄位設置 Column() 沒設置，卻能用的，是用了甚麼巫術
-            還是用了 C8764 或是 屠龍倚天劍 ，斬斷了要用 Column() 配置欄位的因果關係         (C8764 = 星爆氣流斬)
+    說明 => __tablename__ = '資料庫的 table 名稱' : 若沒有設置，預設使用 class 的名稱 (轉小寫字母)
+            primary_key = True : 基本上要有主鍵
+            unique = True/False : 唯一值。 在同一個 table 下的欄位(同一個欄位下)，不可以有第二個相同的值
+            nullable = True/False : 允許為空值。 開啟的時候，新增資料時，該欄位可以不用新增資料(可選的欄位)
+                                                反之，新增資料時，未新增到該欄位，要 debug 囉! (必填欄位)
 
-                            以下是欄位型別 與 功能
+    反正經常使用的型別，也就那幾個，當作這是個長~~~~~~~~的要命的筆記
+    
+    建立欄位沒使用 Column()，卻能搞出來的，
+    是用了甚麼巫術，還是用了 C8764 或是 屠龍倚天劍 ，斬斷了要用 Column() 配置欄位的因果關係
+    
+    註1 : C8764 => 星爆氣流斬，源自於動畫刀劍神域，主角的絕招
+    註2 : 屠龍倚天劍 => 武俠小說會出現的高級武器
+    ```
 
-            
-        |       db.欄位功能                 | Python  資料型別 |
-        |----------------------------------|------------------|
-        | 1. Column() : 配置欄位            |                  |
-        | 2. Integer : 32 bit 的整數        | int              |
-        | 3. SmallInteger : 16 bit 的整數   | int              |
-        | 4. BigInteger : 不限精度 的整數   | int              |
-        | 5. Float : 浮點數                 | float            |
-        | 6. String(字數) : 文字            | str              |
-        | 7. Text() : 長字串                | str              |
-        | 8. LargeBinary : 二進制文件       | str              |
-        | 9. PickleType : 序列化文件        | object           |
-        |-----------------------------------------------------|
+    <br>
+    
+    
+    | 欄位常用屬性參數  | 用途   |
+    |------------|-------------|
+    |primary_key | 主鍵         |
+    |unique	     | 唯一值       |
+    |index	     | 設置索引     |
+    |nullable	 | 允許null     |
+    |default	 | 設置欄位預設值|
+          
+    |       db.欄位功能                 | Python  資料型別 |
+    |----------------------------------|------------------|
+    | 1. Column() : 配置欄位            |                  |
+    | 2. Integer : 32 bit 的整數        | int              |
+    | 3. SmallInteger : 16 bit 的整數   | int              |
+    | 4. BigInteger : 不限精度 的整數   | int              |
+    | 5. Float : 浮點數                 | float            |
+    | 6. String(字數) : 文字            | str              |
+    | 7. Text() : 長字串                | str              |
+    | 8. LargeBinary : 二進制文件       | str              |
+    | 9. PickleType : 序列化文件        | object           |
 
-        增、刪、改、查，等功能操作
+      
+<br>
+
+  * 增、刪、改、查，等功能操作
+    大致會用到 3 個函式:
+    * db.session.add(新增資料 or 更動資料)
+    * db.session.delete(要刪除的目標資料)
+    * db.session.commit()  =>  提交資料更改。 前面兩種指令執行後，一定要推送，不然不會更動
+    
+    查詢:
+    ```
+        class 名稱(資料表).query.filter().功能()  =>  功能() --> all() 全抓下來 (所有查詢結果)
+                                                                first() 返回第一筆資料
+                                                                ......
         
-            大致會用到: db.session.add(新增資料、更動資料)
-                    db.session.delete(要刪除的目標資料)
-                    db.session.commit()  =>  提交資料。 前面兩種指令執行後，一定要推送，不然不會更動
-                
-                查詢:  class 名稱(資料表).query.filter().功能()  =>  功能() --> all() 全抓下來 (所有查詢結果)
-                                                                            first() 返回第一筆資料
-                                                                            ......
-                    
-                    class 名稱(資料表).query.filter_by().功能() => filter_by() 做簡單查詢，有人說是語法糖
-                                                
-                                                P.S : 好比 SQL 的語句 where
+        class 名稱(資料表).query.filter_by().功能() => filter_by() 做簡單查詢，有人說是語法糖
+                                    
+                                    P.S : 好比 SQL 的語句 where, MySQL 的 select
+    ```
 
-* **在 Python Shell (CLI) 底下的 sqlite 指令**
-    * (皆以使用者為例)
+## **在 Python Shell (CLI) 底下的 sqlite 指令**
+* 皆以使用者為例
+* 這邊是 command prompt, powershell 底下的命令列操作
 
-    1. 引用目標的編輯檔
-            
-            引入資料表 => ``` >>> from 資料庫編輯檔 import Users, ......```
-
-
-    2. 增加資料
+1. 引用目標的編輯檔
         
-           1. 新增全新的資料 (ex: 註冊新帳號)
-               
-               * 從管理資料表 的 class 操作
-                   ```python
-                   user = Users(
-                       username = 帳號名稱,    # 資料輸入到欄位內
-                       email = 電子郵件,
-                       password = 密碼
-                   )
-                   db.session.add(user)    # 新增
-                   db.session.commit()     # 提交
-                   ```
-            2. 針對已存在的資料，其他欄位的新增
-               
-               * 操作方式: 其實與 "**第 3 點 的 改動資料**" 的操作方式，步驟類似
-                           
-               * 流程大致上為
-                   1. 查詢 (過濾、篩選到) "**目標使用者**"
-                   2. 查到的使用者，挑一下要增加的欄位
-                   3. 最後把資料塞進去後，提交變更
-                
-                **查詢 請看第 4 點: 查詢指令**
+        引入資料表 => ``` >>> from 資料庫編輯檔 import Users, ......```
 
-    3. 改動資料
+
+2. 增加資料
+    
+    1. 新增全新的資料 (ex: 註冊新帳號)
+
+        * 從管理資料表 的 class 操作
+            ```python
+            user = Users(
+                username = 帳號名稱,    # 資料輸入到欄位內
+                email = 電子郵件,
+                password = 密碼
+            )
+            db.session.add(user)    # 新增
+            db.session.commit()     # 提交
+            ```
+     2. 針對已存在的資料，其他欄位的新增
            
-           * 針對已存在的資料，其他欄位的改動
+           * 操作方式: 其實與 "**第 3 點 的 改動資料**" 的操作方式，步驟類似
 
-               * 針對 "目標帳號" ，新增其他欄位的資料
-                   - 這邊就要用到 "查詢使用者" 的指令，來指定目標新加資料
-                       ```python
-                       user = Users.query.filter_by(查詢欄位=輸入資訊).first()   # 查詢目標使用者
+           * 流程大致上為
+               1. 查詢 (過濾、篩選到) "**目標使用者**"
+               2. 查到的使用者，挑一下要增加的欄位
+               3. 最後把資料塞進去後，提交變更
+            
+        **查詢 請看第 4 點: 查詢指令**
 
-                       user.欄位 = 新增資料    # 針對 目標的欄位
-                       db.session.add(user)
-                       db.session.commit()
-                       ```
-           
-
-    4. 查詢指令 => >>> user = Users.query.filter_by(查詢欄位=輸入資訊).first()
-        
-        ```python
-        * |>>> user = Users.query.filter_by(id = 1).first()
-        * | <User: Rex, email: admin@hotmail.com>
-        ```
-
-    5. 刪除資料
+3. 改動資料
        
-       * 流程如下
-            1. 查詢目標 => >>> user = Users.query.filter_by(查詢欄位=輸入資訊).first()
-            2. 刪除資料 => >>> db.session.delete(user)
-            3. 提交更動 => >>> db.session.commit()
+    * 針對已存在的資料，其他欄位的改動
+         * 針對 "目標帳號" ，新增其他欄位的資料
+            這邊就要用到 "查詢使用者" 的指令，來指定目標新加資料
+            ```python
+            user = Users.query.filter_by(查詢欄位=目標資料).first()   # 查詢目標使用者
+
+            user.欄位 = 輸入資料    # 針對 目標的欄位
+            db.session.add(user)
+            db.session.commit()
+            ```
+       
+
+4. 查詢指令 => >>> user = Users.query.filter_by(查詢欄位=輸入資訊).first()
+    
+    ```python
+    PS >>> user = Users.query.filter_by(id = 1).first()
+    PS >>> <User: Rex, email: admin@hotmail.com>
+    ```
+
+5. 刪除資料
+   
+   * 流程如下
+        1. 查詢目標 => >>> user = Users.query.filter_by(查詢欄位=輸入資訊).first()
+        2. 刪除資料 => >>> db.session.delete(user)
+        3. 提交更動 => >>> db.session.commit()
 
 
 * **Sqlite 的資料庫搬遷 (欄位改動)**
@@ -258,7 +302,7 @@
       * |--> 其他設置
               1. @app.route('/your_route/<type: variable>')  =>  <型別: 變數名>
               2. flask 支援的型別有 ```str```, ```int```, ```float```, ```path```，
-                    **如果沒有特別定義參數型別，則預設型別為 "字串"**
+                    如果沒有特別定義參數型別，則預設型別為 "字串"
 
 
 * ```python
@@ -351,6 +395,8 @@
 
 
 * Jinja2 模板引擎
+      * 這邊就大概紀錄先前操作過的功能，詳細說明就到官方文檔，慢慢細品
+      * 官方網站: https://jinja.palletsprojects.com/
 
       * 這部分是在 HTML 的操作，相關的參數 與 過濾器函式
 
@@ -359,7 +405,8 @@
                  * 說明: { } 內部的兩側，以 % 號表示，是做為運算用的表示式
                  
                  * 例子: 
-                      1. 樣板繼承
+                      1. 樣板繼承: {% extends "繼承的檔案路徑" %}
+                      2. 繼承後要在目標位置，顯示指令內容
                             目標的樣板: base.html
                                 {% block 使用的名稱 %}
 
@@ -367,7 +414,7 @@
                                 {% block 使用的名稱 %}
                                     樣板內容
                                 {% endblock %}
-                      2. for 迴圈
+                      3. for 迴圈
                             {% for item in items %}
                                 {{ item }}
                             {% endfor %}
@@ -398,7 +445,7 @@
                             ```
 
                3. {#  #}
-                 * 說明: { } 內部的兩側，以 % 號表示，這是做為 Jinja2 註解使用的
+                 * 說明: { } 內部的兩側，以 # 號表示，這是做為 Jinja2 註解使用的
                  
                  * 例子:
                       1. {# 我的註解 #}
@@ -408,4 +455,52 @@
                             {% endfor %}
                           #}
 
+      * 各式操作範例
+
+          1. 模板繼承: 有時候，當我們把一個頁面的 HTML 內的設計，或是切版做完了，
+                       但假設會有不同功能的頁面，會使用到同一個類型的切版設計，
+                       難不成，要重新再打一遍 (或 Ctrl + C, Ctrl + V) 嗎 ?!
+                       
+                       那在使用模板繼承，至少可以省下一些步驟
+
+                範例程式碼如下:
+
+                * file name: base.html
+
+                    ```html
+                    <!DOCTYPE html>
+                    <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                            <title>{% block title %}{% endblock %}</title>
+                        </head>
+                        <body>
+                            {% block content %}
+                            {% endblock %}
+                        </body>
+                    </html>
+                    ```
+
+                * file name: user.html
+
+                    ```html
+                    {# 繼承模板: base.html #}
+                    {% extends "base.html" %}
+
+                    {# 作用於 base.html 的 title 標籤裡面 #}
+                    {% block title %}
+                        User Profile
+                    {% endblock %}
+
+                    {# 在 base.html 的 body 標籤內部，操作 #}
+                    {% block content %}
+                    
+                    <div>
+                        <!-- user.html 的內容 -->
+                        ...
+                    </div>
+
+                    {% endblock %}
+                    ```
 
